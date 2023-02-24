@@ -85,4 +85,4 @@ AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
 JENKINS_PASSWORD=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 
 # Store the password as a secret in AWS Secrets Manager
-aws secretsmanager create-secret --name "jenkins-admin-password" --secret-string "$JENKINS_PASSWORD" --description "Jenkins secrets to login UI." --region $AWS_REGION
+aws secretsmanager create-secret --name "${JENKINS_ADMIN}" --secret-string "$JENKINS_PASSWORD" --description "Jenkins secrets to login UI." --region $AWS_REGION
