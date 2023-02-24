@@ -1,4 +1,4 @@
-**BACKUP:**
+**BACKUP**
 
 Backup is very important in any environment and this is because it contains imporant config files and directories.
 we can use any programming lang. to achieve this, like in my case i'm using shell scripts to backup snapshots taking from the Jenkins EBS volume Snapshots.
@@ -55,3 +55,7 @@ pipeline {
   }
 }
 ```
+
+Install the `CloudBees AWS Credentials Plugin` plugins
+
+This can be a Job on jenkins and it run to always trigger snapshots for the jenkins server and the EBS volumes.
