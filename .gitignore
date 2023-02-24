@@ -36,4 +36,5 @@ override.tf.json
 terraform.rc
 
 # ssh Keys
-*jenkins*
+jenkins
+jenkins.pub
