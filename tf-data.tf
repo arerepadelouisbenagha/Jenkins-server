@@ -30,6 +30,7 @@ data "cloudinit_config" "jenkins" {
         AWS_ACCESS_KEY_ID     = var.AWS_ACCESS_KEY_ID
         AWS_SECRET_ACCESS_KEY = var.AWS_SECRET_ACCESS_KEY
         AWS_REGION            = var.AWS_REGION
+        JENKINS_ADMIN         = var.JENKINS_ADMIN
     })
   }
 }
