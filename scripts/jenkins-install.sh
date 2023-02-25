@@ -4,12 +4,12 @@ exec > >(tee /var/log/userdata.log) 2>&1
 # volume setup
 # The sudo vgchange -ay command will activate all inactive volume groups on a Linux system.
 sudo vgchange -ay
-
 # Set disk device name
 DEVICE_NAME=${DEVICE}
 DIR="/var/lib/jenkins"
 USERNAME="ubuntu"
 DEVICE_FS=`blkid -o value -s TYPE ${DEVICE}`
+
 
 if [ "`echo -n $DEVICE_FS`" == "" ] ; then 
   # wait for the device to be attached
@@ -44,7 +44,7 @@ fi
 
 # install dependencies
 sudo apt-get -y update
-apt-get install -y openjdk-11-jdk awscli
+sudo apt-get install -y openjdk-11-jdk awscli openssl whois
 
 curl -fsSL ${JENKINS_URL}/jenkins.io.key | sudo tee \
   /usr/share/keyrings/jenkins-keyring.asc > /dev/null
@@ -55,9 +55,6 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
 
 sudo apt-get -y update
 sudo apt-get -y install jenkins
-
-
-# Add ubuntu to sudoers file
 
 # Check if the script is being run as root
 if [ $(id -u) -ne 0 ]; then
@@ -76,13 +73,13 @@ else
    echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 fi
 
-# AWS Secrets Manager information
+# echo Jenkins current password
+JENKINS_PASSWORD=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
+
+# AWS Credentials
 AWS_REGION=${AWS_REGION}
 AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
 AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-
-# echo Jenkin password to aws secrets mamanger
-JENKINS_PASSWORD=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)
 
 # Store the password as a secret in AWS Secrets Manager
 aws secretsmanager create-secret --name ${JENKINS_ADMIN} --secret-string "$JENKINS_PASSWORD" --description "Jenkins secrets to login UI." --region $AWS_REGION

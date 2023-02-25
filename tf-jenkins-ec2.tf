@@ -1,3 +1,14 @@
+resource "aws_eip" "instance" {
+  instance = aws_instance.jenkins-instance.id
+  vpc      = true
+  tags = {
+    Name = "JenkinsEip"
+  }
+  depends_on = [
+    aws_internet_gateway.gw
+  ]
+}
+
 resource "aws_instance" "jenkins-instance" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = "t2.micro"
